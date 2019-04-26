@@ -1,0 +1,29 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="container-fluid" *ngIf="isLoggedIn">
+  <div class="row top-bar">
+    <div class="col-12">
+
+      <cat-header></cat-header>
+
+    </div>
+  </div>
+
+</div>
+
+<ng4-loading-spinner> </ng4-loading-spinner>
+
+<div class="mt-5">
+    <router-outlet></router-outlet>
+</div>
+
+<div class="container">
+<div class="row" *ngIf="showMessage">
+    <br />
+
+      <div class="col-12"   [ngClass]="message.severity === 'success'? 'alert alert-success alert-dismissible fade show' : 'alert alert-danger alert-dismissible fade show'" >
+
+        {{message.message}}
+
+      </div>
+    </div>
+  </div>
