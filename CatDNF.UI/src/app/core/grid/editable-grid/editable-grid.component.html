@@ -1,47 +1,93 @@
 <!-- <form [formGroup]="reconciliationForm"> -->
-    <!-- <div formArrayName="items"> -->
-<p-table [columns]="columns"  [responsive]="true" #dt [value]="data" [paginator]="paginator"
- [rows]="pageSize" [lazy]="lazy" (onLazyLoad)="lazySelect($event)">
- <ng-template pTemplate="caption" let-columns *ngIf="export" >
-    <div class="ui-helper-clearfix" >
-        <button type="button" pButton icon="fa fa-file-o" iconPos="left" (click)="dt.exportCSV()" label="Export All" style="float: right;">Export All</button>
-        <button *ngIf="selectionMode != ''"  type="button" pButton icon="fa fa-file" iconPos="left" (click)="dt.exportCSV({selectionOnly:true})" label="Export Selected" style="float:right">Export Selected</button>
+<!-- <div formArrayName="items"> -->
+<p-table [columns]="columns" [responsive]="true" #dt [value]="data" [paginator]="paginator" [rows]="pageSize">
+  <ng-template pTemplate="caption" let-columns *ngIf="export">
+    <div class="ui-helper-clearfix">
+      <button type="button" pButton icon="fa fa-file-o" iconPos="left" (click)="dt.exportCSV()" label="Export All"
+              style="float: right;">
+        Export All
+      </button>
+      <button *ngIf="selectionMode != ''" type="button" pButton icon="fa fa-file" iconPos="left"
+              (click)="dt.exportCSV({selectionOnly:true})" label="Export Selected" style="float:right">
+        Export
+        Selected
+      </button>
     </div>
-</ng-template>
+  </ng-template>
   <ng-template let-account pTemplate="header">
     <tr>
-      <th *ngFor="let item of columns"  [pSortableColumn]="item.sortable ? item.field : null">{{item.header}}
-            <p-sortIcon *ngIf="item.sortable" [field]="item.field" ariaLabel="Sort" ariaLabelDesc="Sort in descending order" ariaLabelAsc="Sort in ascending order"></p-sortIcon>
+      <th *ngFor="let item of columns" [pSortableColumn]="item.sortable ? item.field : null">
+        {{item.header}}
+        <p-sortIcon *ngIf="item.sortable" [field]="item.field" ariaLabel="Sort" ariaLabelDesc="Sort in descending order"
+                    ariaLabelAsc="Sort in ascending order"></p-sortIcon>
       </th>
     </tr>
   </ng-template>
   <ng-template let-dataRow pTemplate="body">
     <tr [pEditableRow]="dataRow">
-      <td *ngFor="let item of columns">
-        
-        <div class="row">
-          <span class="mobDisplay">{{item.header}}</span>
-        </div>
-        <ng-template pTemplate="output">
-        <div (click)="onColClick(item, dataRow, item.field)"  [ngSwitch]="item.type" class="row" [ngStyle]="{ 'float': item.type == 'number'? 'right': 'left' }">
-          <div *ngSwitchCase="'number'">
-            {{dataRow[item.field].toFixed(2)}}
-          </div>
-          <div *ngSwitchCase="'date'">
-            {{dataRow[item.field] | date: 'MM/dd/yyyy'}}
-          </div>
-         
-          <div *ngSwitchCase="'image'">
-              <img style="float:right" class="summaryImg" src="{{item.url}}"   title="{{item.header}}"/>
-          </div>
-          <div *ngSwitchDefault>
+      <td *ngFor="let item of columns" pEditableColumn>
+        <p-cellEditor>
+
+
+          <ng-template pTemplate="output">
+            <div class="row">
+              <span class="mobDisplay">{{item.header}}</span>
+            </div>
+            <div [ngSwitch]="item.type" class="row" [ngStyle]="{ 'float': item.type == 'number'? 'right': 'left' }">
+              <div *ngSwitchCase="'number'">
+                {{dataRow[item.field].toFixed(2)}}
+              </div>
+              <div *ngSwitchCase="'date'">
+                {{dataRow[item.field] | date: 'MM/dd/yyyy'}}
+              </div>
+              <div *ngSwitchCase="'checkbox'">
+                <p-checkbox value="" [(ngModel)]="dataRow[item.field]"></p-checkbox>
+              </div>
+              <div *ngSwitchCase="'image'">
+                <img style="float:right" class="summaryImg" src="{{item.url}}" title="{{item.header}}" />
+              </div>
+              <div *ngSwitchDefault>
                 {{dataRow[item.field]}}
               </div>
-        </div>
-      </ng-template>
-      <ng-template pTemplate="input">
-          <input pInputText type="text"  [(ngModel)]="rowData['item.field']" required>
-      </ng-template>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="input">
+            <div class="row">
+              <span class="mobDisplay">{{item.header}}</span>
+            </div>
+            <div [ngSwitch]="item.editType" class="row" [ngStyle]="{ 'float': item.type == 'number'? 'right': 'left' }">
+
+              <div *ngSwitchCase="'number'">
+                <input pInputText type="number" [(ngModel)]="dataRow[item.field]" required />
+
+              </div>
+              <div *ngSwitchCase="'checkbox'">
+                <p-checkbox value="" [(ngModel)]="dataRow[item.field]"></p-checkbox>
+              </div>
+              <div *ngSwitchCase="'date'">
+                <p-calendar [(ngModel)]="dataRow[item.field]" [yearNavigator]="true" yearRange="1900:2100"
+                            [minDate]="item.dateValidations?.minDateValue" [maxDate]="item.dateValidations?.maxDateValue"
+                            [disabledDates]="item.dateValidations?.invalidDates" [disabledDays]="item.dateValidations?.disabledDays"
+                            [readonlyInput]="false"></p-calendar>
+              </div>
+              <div *ngSwitchCase="'dropdown'">
+                <p-dropdown field="item.editDisplayField" [options]="item.editMasterValues" dataKey="item.editDataKey"
+                            [(ngModel)]="dataRow[item.field]"></p-dropdown>
+              </div>
+              <div *ngSwitchCase="'autocomplete'">
+                <p-autoComplete field="item.editDisplayField" dataKey="item.editDataKey"
+                                [(ngModel)]="dataRow[item.field]" [suggestions]="autoCompleteSuggestions" (completeMethod)="search($event)"></p-autoComplete>
+              </div>
+              <div *ngSwitchCase="'multiselect'">
+                <p-multiSelect field="item.editDisplayField" [options]="item.editMasterValues" dataKey="item.editDataKey"
+                               [(ngModel)]="dataRow[item.field]"></p-multiSelect>
+              </div>
+              <div *ngSwitchDefault>
+                <input pInputText type="text" [(ngModel)]="dataRow[item.field]" />
+              </div>
+            </div>
+          </ng-template>
+        </p-cellEditor>
 
       </td>
     </tr>
@@ -55,4 +101,3 @@
     Welcome back, friend.
   </div>
 </ng-template>
- 

@@ -13,7 +13,7 @@ import { GridColumnDirective } from '../grid-column.directive';
 import { GridComponent } from '../grid.component';
 
 @Component({
-  selector: 'cat-editable-grid',
+  selector: 'web-editable-grid',
   templateUrl: './editable-grid.component.html',
   styleUrls: ['./editable-grid.component.scss']
 })
@@ -21,6 +21,6 @@ export class EditableGridComponent extends GridComponent implements OnInit {
   constructor() {
     super();
   }
-  ngOnInit() {}
-  
+  ngOnInit() { }
+
 }

@@ -18,7 +18,12 @@ import { ComplexGridComponent } from './grid/complex-grid/complex-grid.component
 import { EditableGridComponent } from './grid/editable-grid/editable-grid.component';
 import { ComplexGridColumnDirective } from './grid/complex-grid/complex-grid-column.directive';
 import { EditableGridColumnDirective } from './grid/editable-grid/editable-grid-column.directive';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
 
+import { CheckboxModule } from 'primeng/checkbox';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 @NgModule({
   imports: [
     ReactiveFormsModule,
@@ -27,6 +32,11 @@ import { EditableGridColumnDirective } from './grid/editable-grid/editable-grid-
     ToastModule,
     TableModule,
     ContextMenuModule,
+    CalendarModule,
+    MultiSelectModule,
+    CheckboxModule,
+    AutoCompleteModule,
+    DropdownModule,
     DeviceDetectorModule.forRoot(),
   ],
   declarations: [
