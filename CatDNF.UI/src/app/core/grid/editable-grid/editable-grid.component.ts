@@ -13,7 +13,7 @@ import { GridColumnDirective } from '../grid-column.directive';
 import { GridComponent } from '../grid.component';
 
 @Component({
-  selector: 'web-editable-grid',
+  selector: 'cat-editable-grid',
   templateUrl: './editable-grid.component.html',
   styleUrls: ['./editable-grid.component.scss']
 })

@@ -20,7 +20,7 @@ import { WebRequest } from '../../web.request';
 
 
 @Directive({
-  selector: 'web-editable-grid-column, [web-editable-grid-column]'
+  selector: 'cat-editable-grid-column, [cat-editable-grid-column]'
 })
 export class EditableGridColumnDirective extends GridColumnDirective {
   @Input() editType: string;
